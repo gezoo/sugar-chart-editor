@@ -42,7 +42,6 @@
         <el-container>
           <el-main style>
             <ChartEditor style="background: #fff" :style="{'transform':ChartEditorStyle}"/>
-            <!-- <ChartWapper selected="true"></ChartWapper> -->
           </el-main>
           <el-footer>
             <el-slider v-model="ChartEditorScale" @change="onchange"></el-slider>
@@ -55,15 +54,13 @@
 </template>
 
 <script>
-import ChartWapper from "./components/ChartWapper.vue";
 import ChartEditor from "./components/ChartEditor.vue";
-import guid from './src/utils/random_str.js';
+import guid from './utils/random_str.js';
 
 
 export default {
   name: "app",
   components: {
-    ChartWapper,
     ChartEditor
   },
   data() {
