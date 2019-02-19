@@ -41,11 +41,11 @@
 
 <script>
 export default {
-  name: "ChartWapper",
   props: {
+    id: String,
     selected: {
       type: Boolean,
-      default: false
+      default: true
     },
     position: {
       type: Object,
@@ -58,7 +58,7 @@ export default {
         x: 0,
         y: 0
       },
-      isHover: false,
+      isHover: true,
       isSelect: this.selected
     };
   },
@@ -67,8 +67,12 @@ export default {
       event.dataTransfer.dropEffect = "move";
       this.mouseInterval.x = event.offsetX - this.$refs.chartWapper.offsetLeft;
       this.mouseInterval.y = event.offsetY - this.$refs.chartWapper.offsetTop;
+
+      //event.dataTransfer.setData("text/plan", this.id);
     },
     ondragend(event) {
+      var parentRect = this.$parent.$el.getBoundingClientRect();
+      console.log(parentRect);
       this.moveTo(
         this.$refs.chartWapper,
         { x: event.offsetX, y: event.offsetY },
@@ -153,7 +157,8 @@ export default {
 
     this.$refs.chartWapper.style.left = `${this.position.x}px`;
     this.$refs.chartWapper.style.top = `${this.position.y}px`;
-  }
+  },
+  created() {}
 };
 </script>
 
