@@ -1,3 +1,9 @@
 module.exports = {
-    runtimeCompiler: true
-  };
+  runtimeCompiler: true,
+  publicPath: undefined,
+  outputDir: undefined,
+  assetsDir: 'static',
+  productionSourceMap: undefined,
+  parallel: undefined,
+  css: undefined
+};
