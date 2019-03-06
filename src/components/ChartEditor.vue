@@ -1,6 +1,6 @@
 <template>
   <div id="ChartEditor" @dragenter="ondragenter" @dragover="ondragover" @drop="ondrop" ref="ChartEditor"
-    :style="backgroundStyle" style="box-shadow: 0 0 10px 0 rgba(0,0,0,.5);position:absolute;">
+    :style="backgroundStyle" style="box-shadow: 0 0 10px 0 rgba(0,0,0,.5);/*position:absolute;*/">
   </div>
 </template>
 
@@ -10,12 +10,23 @@
   import ChartText from "./Other/ChartText.vue";
   import ChartImage from "./Other/ChartImage.vue";
   import ChartTimer from "./Other/ChartTimer.vue";
+  import ChartContainer from "./ChartContainer.vue";
   import { mapState, mapGetters, mapActions } from 'vuex';
 
   export default {
     name: "ChartEditor",
     components: {
       ChartWapper
+    },
+    props: {
+      editorAttrite: {
+        type: Object,
+        default: undefined
+      },
+      isEdit: {
+        type: Boolean,
+        default: true
+      }
     },
     data() {
       return {
@@ -54,17 +65,17 @@
         this.$store.commit('addNode', {
           id: eventData.eleId,
           type: eventData.type,
-          component: component,
+          // component: component,
           position: { x: event.offsetX, y: event.offsetY }
         });
       },
       nodeClick(id) {
         this.$store.commit("setSelectedId", id);
       },
-      deleteNode(id){
+      deleteNode(id) {
         this.$store.commit('deleteNode', id);
       },
-      copyNode(id){
+      copyNode(id) {
 
       },
       createComponent(eleId, position, chlid) {
@@ -96,9 +107,9 @@
         var chlid;
         if (type == "text") {
           chlid = ChartText;
-        } else if(type == "image") {
+        } else if (type == "image") {
           chlid = ChartImage;
-        }else {
+        } else {
 
           chlid = ChartTimer;
         }
@@ -115,6 +126,8 @@
           eleId: arr[1]
         }
       }
-    }
+    },
+    mounted() {
+    },
   };
 </script>

@@ -12,26 +12,18 @@ export default {
     },
     mutations: {
         addNode(state, node) {
-            // state.root.nodes.push(node);
-            // state.root.nodes.forEach(item => {
-            //     if (item.id !== node.id) {
-            //         item.selected = false;
-            //     }
-            // })
             state.root.nodes.set(node.id, node);
         },
         setSelectedId(state, id) {
             state.selectedId = id;
         },
         deleteNode(state, id) {
-            // var index = state.root.nodes.findIndex(node=>node.id == id);
-            // state.root.nodes.slice(index,1);
             state.root.nodes.delete(id);
         },
         changeNodePosition(state, payload) {
             var node = state.root.nodes.get(payload.id);
-            node.x = payload.x;
-            node.y = payload.y;
+            node.position.x = payload.x;
+            node.position.y = payload.y;
         },
         changeNodeSize(state, payload) {
             var node = state.root.nodes.get(payload.id);
@@ -50,12 +42,6 @@ export default {
         },
         getNodeById(state) {
             return (id) => {
-                // state.root.nodes.forEach(node => {
-                //     if (node.id == id) {
-                //         return node;
-                //     }
-                // });
-                // return null;
                 return state.root.node.get(id);
             }
         },
@@ -64,7 +50,6 @@ export default {
         },
         hasNodeById(state) {
             return (id) => {
-                //return state.root.nodes.find(node => node.id == id);
                 return state.root.nodes.has(id);
             }
         },

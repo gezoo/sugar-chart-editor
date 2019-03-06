@@ -30,7 +30,7 @@
       position: {
         type: Object,
         default: { x: 0, y: 0 }
-      },
+      }
     },
     data() {
       return {
@@ -72,6 +72,7 @@
         this.mouseInterval.y = event.offsetY - this.$refs.chartWapper.offsetTop;
       },
       ondragend(event) {
+        if(!this.isSelect) return; //没选中不移动组件
         this.moveTo(
           this.$refs.chartWapper,
           { x: event.offsetX, y: event.offsetY },
@@ -101,7 +102,6 @@
       },
       onMouseDown(event) {
         if (event.button != 0) return; //不是鼠标左键单击
-
         var that = this;
         var ele = this.$refs.chartWapper;
         ele.draggable = false;
@@ -176,10 +176,9 @@
         this.$emit("onselected", this.id);
       }
     },
-    created() { },
+    created() {
+    },
     beforeDestroy() {
-      //this.open = false;
-      console.log("beforeDestroy ");
     }
   };
 </script>
