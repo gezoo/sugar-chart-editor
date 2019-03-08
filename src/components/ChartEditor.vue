@@ -1,6 +1,6 @@
 <template>
   <div id="ChartEditor" @dragenter="ondragenter" @dragover="ondragover" @drop="ondrop" ref="ChartEditor"
-    :style="backgroundStyle" style="box-shadow: 0 0 10px 0 rgba(0,0,0,.5);/*position:absolute;*/">
+    :style="backgroundStyle" style="box-shadow: 0 0 10px 0 rgba(0,0,0,.5);/*position:absolute;*/" @click="onEditorClick">
   </div>
 </template>
 
@@ -48,6 +48,9 @@
       }
     },
     methods: {
+      onEditorClick(event){
+        this.$store.commit("setSelectedId", "");
+      },
       ondragenter(event) { },
       ondragover(event) {
         event.preventDefault();
