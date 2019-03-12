@@ -8,7 +8,7 @@ export default {
             background: '../../static/img/background-1.png',
             width: 1920,
             height: 1080,
-            name: '',
+            name: '大屏1',
             description: '',
             nodes: new Map(),
             cacheNodes: []
