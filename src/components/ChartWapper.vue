@@ -77,21 +77,6 @@ export default {
       return selected;
     },
     wapperStyle() {
-      // var selected = this.$store.getters.getSelectedId == this.id;
-      // if (selected) {
-      //   //   var node = this.$store.getters.getNodeById(this.id);
-      //   //   if (node) {
-      //   //     return {
-      //   //       width: `${node.width}px`,
-      //   //       height: `${node.height}px`,
-      //   //       left: `${node.position.x}px`,
-      //   //       top: `${node.position.y}px`
-      //   //     };
-      //   //   }
-      //   // }
-      //   var node = this.$store.getters.getNodeById(this.id);
-      //   return node;
-      // }
       return this.$store.editor.root.cacheNodes;
     }
   },
@@ -131,7 +116,7 @@ export default {
       }
       target.style.left = `${left}px`;
       target.style.top = `${top}px`;
-      this.$store.commit("changeNodePosition", {
+      this.$store.commit("changeNode", {
         id: this.id,
         x: left,
         y: top
@@ -139,14 +124,14 @@ export default {
     },
     resizeWidth(mouseX, eleOffsetX) {
       this.$refs.chartWapper.style.width = `${mouseX - eleOffsetX}px`;
-      this.$store.commit("changeNodeSize", {
+      this.$store.commit("changeNode", {
         id: this.id,
         width: mouseX - eleOffsetX
       });
     },
     resizeHeight(mouseY, eleOffsetY) {
       this.$refs.chartWapper.style.height = `${mouseY - eleOffsetY}px`;
-      this.$store.commit("changeNodeSize", {
+      this.$store.commit("changeNode", {
         id: this.id,
         height: mouseY - eleOffsetY
       });
@@ -214,16 +199,14 @@ export default {
       this.removeMouseMoveEvent();
       this.$refs.chartWapper.style.left = `${this.position.x}px`;
       this.$refs.chartWapper.style.top = `${this.position.y}px`;
-      this.$store.commit("changeNodeSize", {
+      this.$store.commit("changeNode", {
         id: this.id,
-        height: this.$refs.chartWapper.style.height,
-        width: this.$refs.chartWapper.style.width
+        height: this.$refs.chartWapper.clientHeight,
+        width: this.$refs.chartWapper.clientWidth,
+        x: this.position.x,
+        y: this.position.y
       });
-      this.$store.commit("changeNodePosition", {
-        id: this.id,
-        x: `${this.position.x}px`,
-        y: `${this.position.y}px`
-      });
+      this.$store.commit("setSelectedId", this.id);
     });
 
     if (this.isSelect) {

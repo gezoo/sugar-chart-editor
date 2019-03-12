@@ -18,9 +18,6 @@ export default {
     };
   },
   mounted() {
-    // this.$nextTick(()=>{
-    //     this.$refs.ChartContainer.style.
-    // })
   },
   created() {
     console.log(this.attribute);

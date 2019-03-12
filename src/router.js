@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
-import Editor from './components/ChartEditor.vue'
 import ChartCanvas from './components/ChartCanvas.vue'
 
 Vue.use(Router)
@@ -22,8 +21,8 @@ export default new Router({
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
     },
     {
-      path: '/editor/edit',
-      name: 'editor',
+      path: '/share',
+      name: 'share',
       component: ChartCanvas,
     }
   ]

@@ -1,9 +1,11 @@
 import Vue from 'vue';
+import guid from '../../utils/random_str';
 
 export default {
     state: {
         root: {
-            background: '../../assets/background-1.png',
+            id: '83DC31202A8F0140E0530A100918D27B',
+            background: '../../static/img/background-1.png',
             width: 1920,
             height: 1080,
             name: '',
@@ -15,7 +17,7 @@ export default {
     },
     mutations: {
         addNode(state, node) {
-            node.name = node.type + "测试";
+            node.name = node.type + '_' + guid(6);
             state.root.nodes.set(node.id, node);
             state.root.cacheNodes.push(node);
             state.selectedId = node.id;
@@ -29,34 +31,14 @@ export default {
             state.root.cacheNodes.splice(idx, 1);
             state.selectedId = "";
         },
-        changeNodePosition(state, payload) {
+        changeNode(state, payload) {
             var node = state.root.nodes.get(payload.id);
-            node.position.x = payload.x;
-            node.position.y = payload.y;
+            if (node == null || node == undefined) return;
 
-            var newNode = Object.assign(node, {position:{x:payload.x,y:payload.y}} );
-            state.root.nodes.set(payload.id, newNode);
-            var index = state.root.cacheNodes.findIndex(x=>x.id == payload.id);
-            state.root.cacheNodes[index] = newNode;
-        },
-        changeNodeSize(state, payload) {
-            var node = state.root.nodes.get(payload.id);
-
-            var source = {};
-            if (payload.width) {
-                source = { width: payload.width };
-            }
-            if (payload.height) {
-                source = { height: payload.height };
-            }
-            if (payload.width && payload.height) {
-                source = { width: payload.width, height: payload.height };
-            }
-
-            var newNode = Object.assign(node, source);
-            state.root.nodes.set(payload.id, newNode);
-            var index = state.root.cacheNodes.findIndex(x=>x.id == payload.id);
-            state.root.cacheNodes[index] = newNode;
+            var newNode = Object.assign(node, payload);
+            state.root.nodes.set(newNode.id, newNode);
+            var index = state.root.cacheNodes.findIndex(x => x.id == newNode.id);
+            Vue.set(state.root.cacheNodes, index, newNode);
         }
     },
     actions: {},

@@ -1,6 +1,7 @@
 <template>
-  <div ref="ChartCanvas">
-    <slot></slot>
+  <div style="position: absolute;top:0;bottom:0;left: 0;right: 0;">
+    <div ref="ChartCanvas" style="transform-origin: 0% 0%;">
+    </div>
   </div>
 </template>
 
@@ -34,8 +35,8 @@ export default {
             {
               props: {
                 attribute: {
-                  left: `${node.position.x}px`,
-                  top: `${node.position.y}px`,
+                  left: `${node.x}px`,
+                  top: `${node.y}px`,
                   width: `${node.width}px`,
                   height: `${node.height}px`
                 }
@@ -53,12 +54,21 @@ export default {
     var json = localStorage.getItem("editor");
     if (json == "" || json == null) return;
     var data = JSON.parse(json);
-    var nodes = data.nodes;
+    var nodes = data.cacheNodes;
+
     var self = this;
     nodes.forEach((node, index, array) => {
       var chlid = this.createNode(node.type);
-      var component = createComponent(self, chlid, node);
+      var component = this.createComponent(self, chlid, node);
       this.$refs.ChartCanvas.appendChild(component.$mount().$el);
+    });
+
+    this.$nextTick(() => {
+      self.$refs.ChartCanvas.style.width = `${data.width}px`;
+      self.$refs.ChartCanvas.style.height = `${data.height}px`;
+      self.$refs.ChartCanvas.style.background = `url(${data.background}) no-repeat 100% 100%`;
+      var zoomIn = window.outerHeight / data.height;
+      self.$refs.ChartCanvas.style.transform = `scale(${zoomIn},${zoomIn})`;
     });
   }
 };
