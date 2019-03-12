@@ -6,18 +6,16 @@
     @drop="ondrop"
     ref="ChartEditor"
     :style="backgroundStyle"
-    style="box-shadow: 0 0 10px 0 rgba(0,0,0,.5);/*position:absolute;*/ "
+    style="box-shadow: 0 0 10px 0 rgba(0,0,0,.5); overflow: hidden; "
     @click="onEditorClick"
-  ></div>
+  >
+    <div id="dashboard-grid-overlay" class="can-cancel-chart-target" style></div>
+  </div>
 </template>
 
 <script>
 import Vue from "vue";
 import ChartWapper from "./ChartWapper.vue";
-import ChartText from "./Other/ChartText.vue";
-import ChartImage from "./Other/ChartImage.vue";
-import ChartTimer from "./Other/ChartTimer.vue";
-import ChartContainer from "./ChartContainer.vue";
 import { mapState, mapGetters, mapActions } from "vuex";
 
 export default {
@@ -40,8 +38,7 @@ export default {
       chartEditorSize: {
         width: "1920px",
         height: "1080px"
-      },
-      nodes: []
+      }
     };
   },
   computed: {
@@ -70,7 +67,7 @@ export default {
       var hasNode = this.$store.getters.hasNodeById(eventData.eleId);
       if (hasNode) return;
 
-      var chlid = this.createNode(eventData.type);
+      var chlid = this.$userComponent(eventData.type);
       var component = this.createComponent(
         eventData.eleId,
         { x: event.offsetX, y: event.offsetY },
@@ -115,18 +112,6 @@ export default {
       this.$refs.ChartEditor.appendChild(component.$mount().$el);
       return component;
     },
-    createNode(type) {
-      var chlid;
-      if (type == "text") {
-        chlid = ChartText;
-      } else if (type == "image") {
-        chlid = ChartImage;
-      } else {
-        chlid = ChartTimer;
-      }
-
-      return chlid;
-    },
     getElementData(event) {
       var text = event.dataTransfer.getData("text/plan");
       if (text == "") return;
@@ -141,3 +126,19 @@ export default {
   mounted() {}
 };
 </script>
+
+<style>
+#dashboard-grid-overlay {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-size: 25px 25px, 25px 25px;
+  background-image: linear-gradient(
+      rgba(255, 255, 255, 0.1) 2px,
+      transparent 0px
+    ),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.1) 2px, transparent 0px);
+}
+</style>

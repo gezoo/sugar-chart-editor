@@ -20,7 +20,7 @@
           <el-tab-pane label="图层管理" name="first">
             <LayerPanel></LayerPanel>
           </el-tab-pane>
-          <el-tab-pane label="图表库" name="second" class="chart-samples-items">
+          <el-tab-pane label="组件库" name="second" class="chart-samples-items">
             <el-collapse value="1" style="height:100%">
               <el-collapse-item title="其他组件" name="1">
                 <div

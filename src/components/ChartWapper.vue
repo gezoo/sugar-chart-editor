@@ -20,6 +20,14 @@
       </el-tooltip>
     </div>
 
+    <div class="grid-line" v-show="isSelect">
+      <div class="grid-line-top"></div>
+      <div class="grid-line-left"></div>
+      <div class="grid-line-label" style="font-size: 20px;">
+        {{wapperPosition.left}},{{wapperPosition.top}}
+      </div>
+    </div>
+
     <div
       v-show="isSelect"
       class="chart-wapper-editor-right chart-wapper-background-color"
@@ -57,7 +65,11 @@ export default {
         y: 0
       },
       isHover: true,
-      open: true
+      open: true,
+      wapperPosition:{
+        left: this.position.x,
+        top: this.position.y,
+      }
     };
   },
   computed: {
@@ -121,6 +133,7 @@ export default {
         x: left,
         y: top
       });
+      this.wapperPosition={left, top};
     },
     resizeWidth(mouseX, eleOffsetX) {
       this.$refs.chartWapper.style.width = `${mouseX - eleOffsetX}px`;
@@ -285,5 +298,30 @@ div {
   font-size: 3px;
   display: flex;
   justify-content: space-around;
+}
+
+.grid-line-top {
+  position: absolute;
+  border-left: 1px dashed #09f;
+  width: 0;
+  height: 2160px;
+  left: 0;
+  transform: translateY(-100%);
+}
+
+.grid-line-left {
+  position: absolute;
+  border-top: 1px dashed #09f;
+  width: 3840px;
+  height: 0;
+  top: 0;
+  transform: translateX(-100%);
+}
+.grid-line-label {
+  position: absolute;
+  padding: 5px;
+  transform: translate(-100%, -100%);
+  color: #09f;
+  white-space: nowrap;
 }
 </style>

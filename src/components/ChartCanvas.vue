@@ -8,24 +8,9 @@
 <script>
 import Vue from "vue";
 import ChartWapper from "./ChartWapper.vue";
-import ChartText from "./Other/ChartText.vue";
-import ChartImage from "./Other/ChartImage.vue";
-import ChartTimer from "./Other/ChartTimer.vue";
 import ChartContainer from "./ChartContainer.vue";
 export default {
   methods: {
-    createNode(type) {
-      var chlid;
-      if (type == "text") {
-        chlid = ChartText;
-      } else if (type == "image") {
-        chlid = ChartImage;
-      } else {
-        chlid = ChartTimer;
-      }
-
-      return chlid;
-    },
     createComponent(parent, chlid, node) {
       const component = new Vue({
         parent: parent,
@@ -58,7 +43,7 @@ export default {
 
     var self = this;
     nodes.forEach((node, index, array) => {
-      var chlid = this.createNode(node.type);
+      var chlid = this.$userComponent(node.type);
       var component = this.createComponent(self, chlid, node);
       this.$refs.ChartCanvas.appendChild(component.$mount().$el);
     });
