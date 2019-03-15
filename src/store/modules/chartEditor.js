@@ -11,7 +11,8 @@ export default {
             name: '大屏1',
             description: '',
             nodes: new Map(),
-            cacheNodes: []
+            cacheNodes: [],
+            components: new Map(),
         },
         selectedId: '',
     },
@@ -39,10 +40,18 @@ export default {
             state.root.nodes.set(newNode.id, newNode);
             var index = state.root.cacheNodes.findIndex(x => x.id == newNode.id);
             Vue.set(state.root.cacheNodes, index, newNode);
+        },
+        setComponent(state, payload) {
+            state.root.components.set(payload.id, payload.component);
         }
     },
     actions: {},
     getters: {
+        getComponent(state) {
+            return (id) => {
+                return state.root.components.get(id).$children[0];
+            }
+        },
         getEditorRoot(state) {
             return state.root;
         },
@@ -64,6 +73,9 @@ export default {
         },
         getSelectedId(state) {
             return state.selectedId;
+        },
+        getSelected(state) {
+            return (id) => state.selectedId == id;
         },
         getSelectedNode(state) {
             var id = state.selectedId;

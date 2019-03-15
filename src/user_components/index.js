@@ -1,4 +1,5 @@
 import mapping from './mapping.js';
+import config from './config.js';
 
 export default {
     install(Vue) {
@@ -8,6 +9,7 @@ export default {
                 return mapping.get(type);
             }
             return chlid;
-        }
+        };
+        Vue.prototype.$config = config;
     }
 };

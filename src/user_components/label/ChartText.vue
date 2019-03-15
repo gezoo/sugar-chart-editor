@@ -1,5 +1,16 @@
 <template>
   <div>
-    <p>文本内容</p>
+    <p>{{text}}</p>
   </div>
 </template>
+
+<script>
+export default{
+  props:{
+    text:{
+      type:String,
+      default:'23412342134'
+    }
+  }
+}
+</script>
