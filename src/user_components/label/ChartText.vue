@@ -11,6 +11,11 @@ export default{
       type:String,
       default:'23412342134'
     }
-  }
+  },
+  watch: {
+    text(value){
+      console.log(value);
+    }
+  },
 }
 </script>

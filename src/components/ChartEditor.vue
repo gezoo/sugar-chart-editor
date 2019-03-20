@@ -48,7 +48,8 @@
     },
     methods: {
       onEditorClick(event) {
-        this.$store.commit("setSelectedId", "");
+        var root = this.$store.getters.getEditorRoot;
+        this.$store.commit("setSelectedId", root.id);
       },
       ondragenter(event) { },
       ondragover(event) {
@@ -61,13 +62,18 @@
         this.$store.commit("setSelectedId", eventData.eleId);
         var hasNode = this.$store.getters.hasNodeById(eventData.eleId);
         if (hasNode) return;
-
-        this.$store.commit("addNode", {
+        var newNode = {
           id: eventData.eleId,
           type: eventData.type,
           x: event.offsetX,
           y: event.offsetY
+        };
+        var atts = this.$config[eventData.type];
+        Object.keys(atts).forEach(key => {
+          newNode[key] = atts[key].defaultValue;
         });
+
+        this.$store.commit("addNode", newNode);
         var position = this.$store.getters.getNodeById(eventData.eleId);
         var chlid = this.$userComponent(eventData.type);
         var component = this.createComponent(
@@ -85,7 +91,7 @@
       },
       copyNode(id) { },
       nodeChanged(attrs) {
-        this.$store.commit("changeNode",attrs);
+        this.$store.commit("changeNode", attrs);
       },
       createComponent(eleId, position, chlid) {
         var that = this;
@@ -106,7 +112,7 @@
                   onchanged: that.nodeChanged
                 }
               },
-              [h(chlid)]
+              [h(chlid, { props: position })]
             );
           }
         });

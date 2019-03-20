@@ -6,55 +6,55 @@
 </template>
 
 <script>
-import Vue from "vue";
-import ChartWapper from "./ChartWapper.vue";
-import ChartContainer from "./ChartContainer.vue";
-export default {
-  methods: {
-    createComponent(parent, chlid, node) {
-      const component = new Vue({
-        parent: parent,
-        render(h) {
-          return h(
-            ChartContainer,
-            {
-              props: {
-                attribute: {
-                  left: `${node.x}px`,
-                  top: `${node.y}px`,
-                  width: `${node.width}px`,
-                  height: `${node.height}px`
-                }
+  import Vue from "vue";
+  import ChartWapper from "./ChartWapper.vue";
+  import ChartContainer from "./ChartContainer.vue";
+  export default {
+    methods: {
+      createComponent(parent, chlid, node) {
+        const component = new Vue({
+          parent: parent,
+          render(h) {
+            return h(
+              ChartContainer,
+              {
+                props: {
+                  attribute: {
+                    left: `${node.x}px`,
+                    top: `${node.y}px`,
+                    width: `${node.width}px`,
+                    height: `${node.height}px`
+                  }
+                },
+                on: {}
               },
-              on: {}
-            },
-            [h(chlid)]
-          );
-        }
+              [h(chlid, { props: node })]
+            );
+          }
+        });
+        return component;
+      }
+    },
+    mounted() {
+      var json = localStorage.getItem("editor");
+      if (json == "" || json == null) return;
+      var data = JSON.parse(json);
+      var nodes = data.cacheNodes;
+
+      var self = this;
+      nodes.forEach((node, index, array) => {
+        var chlid = this.$userComponent(node.type);
+        var component = this.createComponent(self, chlid, node);
+        this.$refs.ChartCanvas.appendChild(component.$mount().$el);
       });
-      return component;
+
+      this.$nextTick(() => {
+        self.$refs.ChartCanvas.style.width = `${data.width}px`;
+        self.$refs.ChartCanvas.style.height = `${data.height}px`;
+        self.$refs.ChartCanvas.style.background = `url(${data.background}) no-repeat 100% 100%`;
+        var zoomIn = window.outerHeight / data.height;
+        self.$refs.ChartCanvas.style.transform = `scale(${zoomIn},${zoomIn})`;
+      });
     }
-  },
-  mounted() {
-    var json = localStorage.getItem("editor");
-    if (json == "" || json == null) return;
-    var data = JSON.parse(json);
-    var nodes = data.cacheNodes;
-
-    var self = this;
-    nodes.forEach((node, index, array) => {
-      var chlid = this.$userComponent(node.type);
-      var component = this.createComponent(self, chlid, node);
-      this.$refs.ChartCanvas.appendChild(component.$mount().$el);
-    });
-
-    this.$nextTick(() => {
-      self.$refs.ChartCanvas.style.width = `${data.width}px`;
-      self.$refs.ChartCanvas.style.height = `${data.height}px`;
-      self.$refs.ChartCanvas.style.background = `url(${data.background}) no-repeat 100% 100%`;
-      var zoomIn = window.outerHeight / data.height;
-      self.$refs.ChartCanvas.style.transform = `scale(${zoomIn},${zoomIn})`;
-    });
-  }
-};
+  };
 </script>

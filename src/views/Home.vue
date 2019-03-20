@@ -64,7 +64,7 @@
           <el-slider value=100 height="10" input-size="mini"></el-slider>
         </el-footer> -->
       </el-container>
-      <el-aside width="200px">
+      <el-aside width="300px">
         <el-tabs>
           <ElTabPane label="属性">
             <ControlPanel></ControlPanel>
