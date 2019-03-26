@@ -229,10 +229,12 @@
 
   .chart-wapper-border {
     border: 2px solid #09f;
+    z-index: 9999;
   }
 
   .chart-wapper-noborder {
     border: 2px solid #fff0;
+    z-index: 9999;
   }
 
   .chart-wapper-background-color {

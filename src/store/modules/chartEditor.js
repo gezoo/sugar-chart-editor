@@ -19,6 +19,7 @@ export default {
     mutations: {
         addNode(state, node) {
             node.name = node.type + '_' + guid(6);
+            console.log(Vue.$config);
             state.root.nodes.set(node.id, node);
             state.root.cacheNodes.push(node);
             state.selectedId = node.id;
@@ -33,13 +34,21 @@ export default {
             state.selectedId = "";
         },
         changeNode(state, payload) {
-            var node = state.root.nodes.get(payload.id);
-            if (node == null || node == undefined) return;
+            if (payload.id == state.root.id) {
+                // Object.keys(payload).forEach(key=>{
+                //     state.root[key] = payload[key];
+                // });
+                var newRoot = Object.assign({}, state.root, payload);
+                state.root = newRoot;
+            } else {
+                var node = state.root.nodes.get(payload.id);
+                if (node == null || node == undefined) return;
 
-            var newNode = Object.assign(node, payload);
-            state.root.nodes.set(newNode.id, newNode);
-            var index = state.root.cacheNodes.findIndex(x => x.id == newNode.id);
-            Vue.set(state.root.cacheNodes, index, newNode);
+                var newNode = Object.assign(node, payload);
+                state.root.nodes.set(newNode.id, newNode);
+                var index = state.root.cacheNodes.findIndex(x => x.id == newNode.id);
+                Vue.set(state.root.cacheNodes, index, newNode);
+            }
         },
         setComponent(state, payload) {
             state.root.components.set(payload.id, payload.component);

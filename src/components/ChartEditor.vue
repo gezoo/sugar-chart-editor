@@ -81,7 +81,6 @@
           position,
           chlid
         );
-        // this.$store.commit('setComponent', { id: eventData.eleId, component: component });
       },
       nodeClick(id) {
         this.$store.commit("setSelectedId", id);

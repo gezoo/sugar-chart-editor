@@ -5,7 +5,7 @@
         <li class="el-icon-zoom-out" @click="onZoomOut"></li>
       </div>
       <div class="button-item">
-        <el-dropdown  @command="onchange">
+        <el-dropdown @command="onchange">
           <span class="el-dropdown-link">{{ChartEditorScale+'%'}}</span>
           <el-dropdown-menu slot="dropdown">
             <el-dropdown-item command="10">10%</el-dropdown-item>
@@ -28,7 +28,7 @@
       </div>
     </el-header>
     <el-container style="height: 100%;">
-      <el-aside width="200px" style>
+      <el-aside width="200px" ref="left">
         <el-tabs value="second" type="card">
           <el-tab-pane label="图层管理" name="first">
             <LayerPanel></LayerPanel>
@@ -50,6 +50,7 @@
           </el-tab-pane>
         </el-tabs>
       </el-aside>
+      <div class="resizer" @onmousedown="onmousedown" @onmouseup="onmouseup" data-resizer="left"></div>
       <el-container>
         <el-header style="height:40px; display: flex;justify-content:center ;align-items:center">
           <el-card :body-style="{ padding: '5px 20px' } ">
@@ -64,7 +65,8 @@
           <el-slider value=100 height="10" input-size="mini"></el-slider>
         </el-footer> -->
       </el-container>
-      <el-aside width="300px">
+      <div class="resizer" @onmousedown="onmousedown" @onmouseup="onmouseup" data-resizer="right"></div>
+      <el-aside width="300px" ref="right">
         <el-tabs>
           <ElTabPane label="属性">
             <ControlPanel></ControlPanel>
@@ -95,7 +97,7 @@
       };
     },
     computed: {
-      title(){
+      title() {
         var root = this.$store.getters.getEditorRoot;
         return root.name;
       }
@@ -131,16 +133,25 @@
         this.ChartEditorScale += 1;
         this.ChartEditorStyle = `scale(${this.ChartEditorScale / 100},${this.ChartEditorScale / 100})`;
       },
-      onZoomOut(){
+      onZoomOut() {
         this.ChartEditorScale -= 1;
         this.ChartEditorStyle = `scale(${this.ChartEditorScale / 100},${this.ChartEditorScale / 100})`;
+      },
+      onmousedown(event) {
+        window.onmouseover = function (e) {
+          if(event.target.dataset.resizer == 'left'){
+            this.$refs.left.style.width = e.clientX + 'px';
+          }else if(event.target.dataset.resizer == 'right'){
+            //this.$refs.right.style.width = 
+          }
+        }
+      },
+      onmouseup(event) {
+        window.onmouseover = null;
       }
     },
     mounted() {
-      // this.$refs.chartText.ondragstart = function (event) {
-      //   event.dataTransfer.effectAllowed = "copy";
-      //   event.dataTransfer.setData("text/plan", event.target.dataset.chartType);
-      // }
+
     }
   };
 </script>
@@ -161,18 +172,19 @@
     margin: 0 10px;
   }
 
-  /* body {
-    margin: 0px;
-    background: #f0f3f4;
-  } */
-
   .chart-samples-items>div {
     height: 24px;
     border: 1px solid gray;
   }
 
   .el-dropdown-link {
-
     cursor: pointer;
+  }
+
+  .resizer {
+    width: 5px;
+    background: #c5c5c5;
+    z-index: 9999;
+    cursor: col-resize;
   }
 </style>
