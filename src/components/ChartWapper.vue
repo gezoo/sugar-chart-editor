@@ -85,28 +85,6 @@
       ...mapGetters(['getNodes','getSelectedId']),
     },
     wacth: {
-      // selected(value) {
-      //   this.isHover = value;
-      //   this.$nextTick(() => {
-      //     this.$refs.chartWapper.draggable = value;
-      //   });
-      // },
-      // position: {
-      //   handler: function (newVal, oldVal) {
-      //     console.log(newVal);
-      //   },
-      //   deep: true
-      // },
-      // getNodes: {
-      //   handler(value) {
-      //     console.log(value);
-      //     // this.$refs.chartWapper.style.width = `${value.width}px`;
-      //     // this.$refs.chartWapper.style.height = `${value.height}px`;
-      //     // this.$refs.chartWapper.style.left = `${value.x}px`;
-      //     // this.$refs.chartWapper.style.top = `${value.y}px`;
-      //   },
-      //   deep: true
-      // }
     },
     methods: {
       ondragstart(event) {

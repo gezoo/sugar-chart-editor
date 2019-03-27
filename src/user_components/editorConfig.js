@@ -40,7 +40,7 @@ export default {
         },
         defaultValue: '使用背景图',
         events: {
-            change: (value) => {
+            input: (value) => {
                 console.log(value);
             }
         },

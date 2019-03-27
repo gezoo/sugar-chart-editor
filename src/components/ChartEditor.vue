@@ -36,10 +36,12 @@
     computed: {
       backgroundStyle() {
         var root = this.$store.getters.getEditorRoot;
+
+        //判断颜色代码 例如#fffff
         return {
           width: `${root.width}px`,
           height: `${root.height}px`,
-          background: `url(${root.background}) no-repeat 100% 100%`
+          background: /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(root.background) ? root.background : `url(${root.background}) no-repeat 100% 100%`,
         };
       },
       nodes() {
