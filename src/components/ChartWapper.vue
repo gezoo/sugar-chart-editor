@@ -1,7 +1,7 @@
 <template>
   <div class="chart-wapper" :class="{'chart-wapper-border': isHover,'chart-wapper-noborder':!isHover }"
-    @dragstart="ondragstart" @dragend="ondragend" @mouseover="onMouseOver" @mouseout="onMouseOut"
-    @click.stop="onSelected" ref="chartWapper" draggable="true" v-if="open">
+    @mouseover="onMouseOver" @mouseout="onMouseOut" @click.stop="onSelected" ref="chartWapper" draggable="false"
+    v-if="open">
     <div v-show="isSelect" class="chart-wapper-editor-tooltip">
       <el-tooltip effect="dark" content="删除" placement="top-start">
         <div class="chart-wapper-editor-delete" @click.stop="onDelete">x</div>
@@ -19,7 +19,8 @@
       </div>
     </div>
 
-    <div v-show="isHover" style="position:absolute; left:0;right:0;top:0;bottom:0" class="chart-wapper-opacity">
+    <div v-show="isHover" style="position:absolute; left:0;right:0;top:0;bottom:0" class="chart-wapper-opacity"
+      @mousedown="onCmpMousedown" ref="wapperOpacity">
     </div>
 
     <div v-show="isSelect" class="chart-wapper-editor-right chart-wapper-background-color" @mousedown="onMouseDown">
@@ -51,7 +52,8 @@
         },
         isHover: true,
         open: true,
-        selected: false
+        selected: false,
+        isDown: false
       };
     },
     computed: {
@@ -65,9 +67,6 @@
       isSelect() {
         var selected = this.$store.getters.getSelectedId == this.id;
         this.isHover = selected;
-        this.$nextTick(() => {
-          this.$refs.chartWapper.draggable = selected;
-        });
         return selected;
       },
       wapperStyle() {
@@ -82,42 +81,44 @@
         });
         return node;
       },
-      ...mapGetters(['getNodes','getSelectedId']),
+      ...mapGetters(['getNodes', 'getSelectedId']),
     },
     wacth: {
     },
     methods: {
-      ondragstart(event) {
-        event.dataTransfer.dropEffect = "move";
-        this.mouseInterval.x = event.offsetX - this.$refs.chartWapper.offsetLeft;
-        this.mouseInterval.y = event.offsetY - this.$refs.chartWapper.offsetTop;
-      },
-      ondragend(event) {
-        if (!this.isSelect) return; //没选中不移动组件
-        this.moveTo(
-          this.$refs.chartWapper,
-          { x: event.offsetX, y: event.offsetY },
-          this.mouseInterval
-        );
-      },
-      moveTo(target, mousePosition, targetInverval) {
-        var left = 0;
-        var top = 0;
-        if (mousePosition.x - targetInverval.x >= 0) {
-          left = mousePosition.x - targetInverval.x;
+      onCmpMousedown(event) {
+        console.log("onCmpMousedown")
+        if (!this.isSelect) return;
+        //获取x坐标和y坐标
+        let x = event.clientX;
+        let y = event.clientY;
+
+        //获取左部和顶部的偏移量
+        let l = this.$refs.chartWapper.offsetLeft;
+        let t = this.$refs.chartWapper.offsetTop;
+        this.isDown = true;
+        //设置样式  
+        event.target.style.cursor = 'move';
+        var that = this;
+        this.parent.onmousemove = function (e) {
+          if (!that.isDown) return;
+          //获取x和y
+          var nx = e.clientX;
+          var ny = e.clientY;
+          //计算移动后的左偏移量和顶部的偏移量
+          var left = nx - (x - l);
+          var top = ny - (y - t);
+
+          that.$emit("onchanged", { id: that.id, x: left, y: top });
+
         }
-        if (mousePosition.y - targetInverval.y >= 0) {
-          top = mousePosition.y - targetInverval.y;
-        }
-        this.$emit("onchanged", { id: this.id, x: left, y: top });
       },
       onMouseDown(event) {
         if (event.button != 0) return; //不是鼠标左键单击
         var that = this;
+        this.isDown = false;
         var ele = this.$refs.chartWapper;
-        ele.draggable = false;
         this.parent.onmousemove = function (mouseEvent) {
-          if (ele.draggable) return;
           var resizeBy = className => {
             return event.target.className.indexOf(className) != -1;
           };
@@ -160,8 +161,9 @@
       removeMouseMoveEvent() {
         var that = this;
         document.onmouseup = function () {
-          if (that.isSelect) that.$refs.chartWapper.draggable = true;
           that.parent.onmousemove = null;
+          that.$refs.wapperOpacity.style.cursor = 'Default';
+          that.isDown = false;
         };
       },
       changeSelectStatus(state) {
@@ -169,20 +171,10 @@
       }
     },
     mounted() {
-      this.$nextTick(() => {
-        this.removeMouseMoveEvent();
-        // this.$refs.chartWapper.style.left = `${this.position.x}px`;
-        // this.$refs.chartWapper.style.top = `${this.position.y}px`;
-        // this.$store.commit("changeNode", {
-        //   id: this.id,
-        //   height: this.$refs.chartWapper.clientHeight,
-        //   width: this.$refs.chartWapper.clientWidth,
-        //   x: this.position.x,
-        //   y: this.position.y
-        // });
-        // this.$store.commit("setSelectedId", this.id);
-      });
-
+      // this.$nextTick(() => {
+      //   this.removeMouseMoveEvent();
+      // });
+      this.removeMouseMoveEvent();
       if (this.isSelect) {
         this.$emit("onselected", this.id);
       }
@@ -289,5 +281,13 @@
     transform: translate(-100%, -100%);
     color: #09f;
     white-space: nowrap;
+  }
+
+  .chart-wapper-container {
+    /* position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0; */
   }
 </style>
