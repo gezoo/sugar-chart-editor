@@ -4,13 +4,13 @@ import Vue from 'vue'
 export default {
     text: {
         text: {
-            type: Input,
-            desc: '内容',
+            type: Input, //组件实例
+            desc: '内容', //左侧显示内容
             defaultValue: '新建内容',
-            props: {
+            props: { //组件props
                 value: ''
             },
-            events: {
+            events: { //组件事件
                 input: (value) => {
                     console.log(value);
                 }

@@ -2,6 +2,16 @@ import { Input, Select, InputNumber, RadioGroup, Radio } from 'element-ui';
 import Vue from 'vue'
 
 export default {
+    name: {
+        type: 'div', //原生节点用字符串
+        desc: '名称',
+        props: {
+            value: '',
+            style: { height: '40px', 'line-height': '40px' },
+            attrs: { id: 'controltitle' }
+        },
+        events: {}
+    },
     width: {
         type: InputNumber,
         desc: '宽度',

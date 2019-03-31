@@ -127,14 +127,22 @@
         var cmp = Vue.extend({
           parent: self,
           render(h) {
-            return h(config.type, {
+            var child = config.slots ? config.slots.map(item => {
+              return h(item.type, { props: item.props, on: item.events })
+            }) : []; //包含子组件
+            var options = {
               props: node,
               on: self.rebuildEvents(config, attrName),
-            },
-              config.slots ? config.slots.map(item => {
-                return h(item.type, { props: item.props, on: item.events })
-              }) : [] //包含子组件
-            )
+            };
+            var isHtmlDom = typeof (config.type) == 'string';
+            if (isHtmlDom) {
+              Object.keys(node).forEach(key => {
+                if (key != 'value') {
+                  options[key] = node[key];
+                }
+              })
+            }
+            return h(config.type, options, isHtmlDom ? node.value : child)
           },
         });
 
@@ -184,5 +192,7 @@
 </script>
 
 <style scoped>
-  .position {}
+  .control-title {
+    line-height: 40px;
+  }
 </style>
