@@ -39,12 +39,40 @@ export default {
                 //     state.root[key] = payload[key];
                 // });
                 var newRoot = Object.assign({}, state.root, payload);
+
+                //处理属性是 style 的情况
+                Object.keys(newRoot).forEach(key => {
+                    if (key.indexOf("style.") != -1) {
+                        var styleKey = key.split('.')[1];
+                        if (newRoot.style) {
+                            newRoot.style[styleKey] = newRoot[key];
+                        } else {
+                            newRoot.style = {};
+                            newRoot.style[styleKey] = newRoot[key];
+                        }
+                    }
+                });
+
                 state.root = newRoot;
             } else {
                 var node = state.root.nodes.get(payload.id);
                 if (node == null || node == undefined) return;
 
                 var newNode = Object.assign(node, payload);
+
+                //处理属性是 style 的情况
+                Object.keys(newNode).forEach(key => {
+                    if (key.indexOf("style.") != -1) {
+                        var styleKey = key.split('.')[1];
+                        if (newNode.style) {
+                            newNode.style[styleKey] = newNode[key];
+                        } else {
+                            newNode.style = {};
+                            newNode.style[styleKey] = newNode[key];
+                        }
+                    }
+                });
+
                 state.root.nodes.set(newNode.id, newNode);
                 var index = state.root.cacheNodes.findIndex(x => x.id == newNode.id);
                 Vue.set(state.root.cacheNodes, index, newNode);

@@ -51,9 +51,26 @@
       this.$nextTick(() => {
         self.$refs.ChartCanvas.style.width = `${data.width}px`;
         self.$refs.ChartCanvas.style.height = `${data.height}px`;
-        self.$refs.ChartCanvas.style.background = `url(${data.background}) no-repeat 100% 100%`;
-        var zoomIn = window.outerHeight / data.height;
-        self.$refs.ChartCanvas.style.transform = `scale(${zoomIn},${zoomIn})`;
+        self.$refs.ChartCanvas.style.background = /^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$/.test(data.background) ? data.background : `url(${data.background}) no-repeat 100% 100%`;
+        var zoomIn = (window.innerHeight ) / data.height;
+        self.$refs.ChartCanvas.style.transform = `scale(${zoomIn})`;
+
+        var margin = window.innerWidth - (data.width * zoomIn);
+        if (margin > 0) {
+          self.$refs.ChartCanvas.style.margin = `0 ${margin / 2}px`
+        }
+
+        window.onresize = function () {
+          console.log(window.innerHeight + 'px');
+          var zoomIn = (window.innerHeight ) / data.height;
+          self.$refs.ChartCanvas.style.transform = `scale(${zoomIn})`;
+          var margin = window.innerWidth - (data.width * zoomIn);
+          if (margin > 0) {
+            self.$refs.ChartCanvas.style.margin = `0 ${margin / 2}px`
+          }else{
+            self.$refs.ChartCanvas.style.margin = 0;
+          }
+        }
       });
     }
   };

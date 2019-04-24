@@ -58,7 +58,7 @@
           </el-card>
         </el-header>
         <el-main style="padding:15px;">
-          <ChartEditor style="transform-origin: 0% 0%;" :style="{'transform':ChartEditorStyle}" />
+          <ChartEditor style="transform-origin: 0 0;" :style="{'transform':ChartEditorStyle}" />
         </el-main>
         <!-- <el-footer style="height:30px">
           <span class="demonstration">默认</span>
@@ -71,7 +71,9 @@
           <ElTabPane label="属性">
             <ControlPanel></ControlPanel>
           </ElTabPane>
-          <ElTabPane label="高级"></ElTabPane>
+          <ElTabPane label="高级">
+            <DATAControlPanel></DATAControlPanel>
+          </ElTabPane>
         </el-tabs>
       </el-aside>
     </el-container>
@@ -81,14 +83,16 @@
 <script>
   import ChartEditor from "../components/ChartEditor.vue";
   import LayerPanel from "../components/LayerPanel.vue";
-  import ControlPanel from "../components/ControlPanel.vue";
+  import ControlPanel from "../components/control_panel/ControlPanel.vue";
+  import DATAControlPanel from "../components/control_panel/DataControlPanel.vue"
   import guid from "../utils/random_str.js";
 
   export default {
     components: {
       ChartEditor,
       LayerPanel,
-      ControlPanel
+      ControlPanel,
+      DATAControlPanel
     },
     data() {
       return {
@@ -127,7 +131,7 @@
           name: "share",
           props: { id: root.id }
         });
-        window.open(href, "_blank", "toolbar=yes, fullscreen=yes");
+        window.open(href, "_blank", "toolbar=yes");
       },
       onZoomIn() {
         this.ChartEditorScale += 1;
@@ -138,6 +142,8 @@
         this.ChartEditorStyle = `scale(${this.ChartEditorScale / 100},${this.ChartEditorScale / 100})`;
       },
       onmousedown(event) {
+        console.log(event);
+
         window.onmouseover = function (e) {
           if(event.target.dataset.resizer == 'left'){
             this.$refs.left.style.width = e.clientX + 'px';
@@ -184,7 +190,7 @@
   .resizer {
     width: 5px;
     background: #c5c5c5;
-    z-index: 9999;
+    z-index: 0;
     cursor: col-resize;
   }
 </style>

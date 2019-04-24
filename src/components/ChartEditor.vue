@@ -72,6 +72,16 @@
         };
         var atts = this.$config[eventData.type];
         Object.keys(atts).forEach(key => {
+          if (key.indexOf("style.") != -1) {
+            var styleKey = key.split('.')[1];
+            if (newNode.style) {
+              newNode.style[styleKey] = atts[key].defaultValue;
+            } else {
+              newNode.style = {};
+              newNode.style[styleKey] = atts[key].defaultValue;
+            }
+          }
+
           newNode[key] = atts[key].defaultValue;
         });
 
@@ -113,7 +123,7 @@
                   onchanged: that.nodeChanged
                 }
               },
-              [h(chlid, { props: position })]
+              [h(chlid, { props: position, style: position.style })]
             );
           }
         });
