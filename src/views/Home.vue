@@ -35,16 +35,59 @@
           </el-tab-pane>
           <el-tab-pane label="组件库" name="second" class="chart-samples-items">
             <el-collapse value="1" style="height:100%">
+              <el-collapse-item title="图表组件" name="1">
+                <DragControl chart-type="text">折线图</DragControl>
+                <DragControl chart-type="text">柱状图</DragControl>
+                <DragControl chart-type="text">饼图</DragControl>
+              </el-collapse-item>
+            </el-collapse>
+            <el-collapse value="1" style="height:100%">
+              <el-collapse-item title="指标组件" name="1">
+                <DragControl chart-type="text">进度条</DragControl>
+                <DragControl chart-type="text">环形进度条</DragControl>
+                <DragControl chart-type="text">指标</DragControl>
+              </el-collapse-item>
+            </el-collapse>
+            <el-collapse value="1" style="height:100%">
+              <el-collapse-item title="地图组件" name="1">
+                <DragControl chart-type="text">地图</DragControl>
+              </el-collapse-item>
+            </el-collapse>
+            <el-collapse value="1" style="height:100%">
+              <el-collapse-item title="表格组件" name="1">
+                <DragControl chart-type="text">表格</DragControl>
+                <DragControl chart-type="text">表格轮播</DragControl>
+              </el-collapse-item>
+            </el-collapse>
+            <el-collapse value="1" style="height:100%">
+              <el-collapse-item title="图片组件" name="1">
+                <DragControl chart-type="text">图片轮播</DragControl>
+                <DragControl chart-type="text">图片</DragControl>
+                <DragControl chart-type="text">iframe</DragControl>
+              </el-collapse-item>
+            </el-collapse>
+            <el-collapse value="1" style="height:100%">
+              <el-collapse-item title="文本组件" name="1">
+                <DragControl chart-type="text">文本</DragControl>
+                <DragControl chart-type="text">文本跑马灯</DragControl>
+                <DragControl chart-type="text">超链接</DragControl>
+                <DragControl chart-type="text">时间</DragControl>
+              </el-collapse-item>
+            </el-collapse>
+            <el-collapse value="1" style="height:100%">
+              <el-collapse-item title="素材组件" name="1">
+                <DragControl chart-type="text">边框</DragControl>
+                <DragControl chart-type="text">图片</DragControl>
+                <DragControl chart-type="text">图标</DragControl>
+                <DragControl chart-type="text">线</DragControl>
+                <DragControl chart-type="text">图形</DragControl>
+              </el-collapse-item>
+            </el-collapse>
+            <el-collapse value="1" style="height:100%">
               <el-collapse-item title="其他组件" name="1">
-                <div draggable="true" ref="chartText" data-chart-type="text" @dragstart="ondragstart">
-                  <el-button icon="el-icon-picture">文本</el-button>
-                </div>
-                <div draggable="true" ref="chartImage" data-chart-type="image" @dragstart="ondragstart">
-                  <el-button icon="el-icon-picture">图片</el-button>
-                </div>
-                <div draggable="true" data-chart-type="timer" ref="chartTimer" @dragstart="ondragstart">
-                  <el-button icon="el-icon-picture">时间</el-button>
-                </div>
+                <DragControl chart-type="text">文本</DragControl>
+                <DragControl chart-type="image">图片</DragControl>
+                <DragControl chart-type="timer">时间</DragControl>
               </el-collapse-item>
             </el-collapse>
           </el-tab-pane>
@@ -85,6 +128,7 @@
   import LayerPanel from "../components/LayerPanel.vue";
   import ControlPanel from "../components/control_panel/ControlPanel.vue";
   import DATAControlPanel from "../components/control_panel/DataControlPanel.vue"
+  import DragControl from "../components/Drag.vue"
   import guid from "../utils/random_str.js";
 
   export default {
@@ -92,7 +136,8 @@
       ChartEditor,
       LayerPanel,
       ControlPanel,
-      DATAControlPanel
+      DATAControlPanel,
+      DragControl
     },
     data() {
       return {
@@ -107,13 +152,6 @@
       }
     },
     methods: {
-      ondragstart(event) {
-        event.dataTransfer.effectAllowed = "copy";
-        event.dataTransfer.setData(
-          "text/plan",
-          `${event.target.dataset.chartType},${guid()}`
-        );
-      },
       onchange(value) {
         this.ChartEditorScale = parseInt(value);
         this.ChartEditorStyle = `scale(${this.ChartEditorScale / 100},${this.ChartEditorScale / 100})`;
@@ -134,20 +172,24 @@
         window.open(href, "_blank", "toolbar=yes");
       },
       onZoomIn() {
-        this.ChartEditorScale += 1;
-        this.ChartEditorStyle = `scale(${this.ChartEditorScale / 100},${this.ChartEditorScale / 100})`;
+        if (this.ChartEditorScale <= 1000) {
+          this.ChartEditorScale += 1;
+          this.ChartEditorStyle = `scale(${this.ChartEditorScale / 100},${this.ChartEditorScale / 100})`;
+        }
       },
       onZoomOut() {
-        this.ChartEditorScale -= 1;
-        this.ChartEditorStyle = `scale(${this.ChartEditorScale / 100},${this.ChartEditorScale / 100})`;
+        if (this.ChartEditorScale > 10) {
+          this.ChartEditorScale -= 1;
+          this.ChartEditorStyle = `scale(${this.ChartEditorScale / 100},${this.ChartEditorScale / 100})`;
+        }
       },
       onmousedown(event) {
         console.log(event);
 
         window.onmouseover = function (e) {
-          if(event.target.dataset.resizer == 'left'){
+          if (event.target.dataset.resizer == 'left') {
             this.$refs.left.style.width = e.clientX + 'px';
-          }else if(event.target.dataset.resizer == 'right'){
+          } else if (event.target.dataset.resizer == 'right') {
             //this.$refs.right.style.width = 
           }
         }
