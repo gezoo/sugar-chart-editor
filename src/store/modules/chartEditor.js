@@ -5,7 +5,7 @@ export default {
     state: {
         root: {
             id: '83DC31202A8F0140E0530A100918D27B',
-            background: '/static/img/background-1.png',
+            background: '#fff',//'/static/img/background-1.png',
             width: 1920,
             height: 1080,
             name: '大屏1',

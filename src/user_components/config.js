@@ -2,7 +2,7 @@ import { Input, Select, Option, InputNumber, RadioGroup, Radio, ColorPicker } fr
 import Vue from 'vue'
 
 export default {
-    text: {
+    ChartText: { //组件名
         text: {
             type: Input, //组件实例
             desc: '内容', //左侧显示内容

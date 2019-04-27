@@ -1,5 +1,5 @@
 <template>
-    <div draggable="true" ref="chartText" :data-chart-type="chartType" @dragstart="ondragstart">
+    <div draggable="true" ref="chartText" :data-chart-type="chartPath" @dragstart="ondragstart">
         <el-button icon="el-icon-picture"><slot></slot></el-button>
     </div>
 </template>
@@ -9,7 +9,7 @@
 
     export default {
         props: {
-            chartType: {
+            chartPath: {
                 type: String,
                 default: '',
             },
